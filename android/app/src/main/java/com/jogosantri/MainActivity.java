@@ -1,5 +1,7 @@
 package com.jogosantri;
 
+import android.os.Bundle; // here
+import org.devio.rn.splashscreen.SplashScreen; // here
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
@@ -15,6 +17,11 @@ public class MainActivity extends ReactActivity {
     return "jogosantri";
   }
 
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      SplashScreen.show(this);  // here
+      super.onCreate(savedInstanceState);
+  }
   /**
    * Returns the instance of the {@link ReactActivityDelegate}. There the RootView is created and
    * you can specify the renderer you wish to use - the new renderer (Fabric) or the old renderer
