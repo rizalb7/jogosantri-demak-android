@@ -1,19 +1,18 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import {HomeScreen} from '../screen';
+import {
+  HomeScreen,
+  EventScreen,
+  NgajiScreen,
+  DaftarSantriScreen,
+  EkonomiScreen,
+} from '../screen';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {Image} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigation() {
-  const optionTabScreen = {
-    headerShown: false,
-    tabBarHideOnKeyboard: true,
-    tabBarLabelStyle: {
-      fontSize: 11,
-      marginBottom: 1,
-    },
-  };
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -21,29 +20,116 @@ export default function TabNavigation() {
           tabBarIcon: ({focused, color}) => {
             let iconName;
 
-            if (route.name === 'Home') {
+            if (route.name === 'HomeTab') {
               iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === 'Layanan Publik') {
-              iconName = focused ? 'briefcase' : 'briefcase-outline';
+              return (
+                <Icon
+                  name={iconName}
+                  size={30}
+                  color={color}
+                  style={{marginTop: 2}}
+                />
+              );
+            } else if (route.name === 'EventTab') {
+              return (
+                <Image
+                  style={{width: 32, height: 32, marginTop: 3}}
+                  source={require('../../android/app/src/main/assets/icon/icon-event.png')}
+                />
+              );
+            } else if (route.name === 'NgajiTab') {
+              return (
+                <Image
+                  style={{width: 32, height: 32, marginTop: 3}}
+                  source={require('../../android/app/src/main/assets/icon/icon-ngaji.png')}
+                />
+              );
+            } else if (route.name === 'EkonomiTab') {
+              return (
+                <Image
+                  style={{width: 32, height: 32, marginTop: 3}}
+                  source={require('../../android/app/src/main/assets/icon/icon-ekonomi.png')}
+                />
+              );
+            } else if (route.name === 'DaftarSantriTab') {
+              iconName = focused ? 'person-add' : 'person-add-outline';
+              return (
+                <Icon
+                  name={iconName}
+                  size={30}
+                  color={color}
+                  style={{marginTop: 3}}
+                />
+              );
             }
-
-            // You can return any component that you like here!
-            return (
-              <Icon
-                name={iconName}
-                size={30}
-                color={color}
-                style={{marginTop: 2}}
-              />
-            );
           },
-          tabBarActiveTintColor: 'dodgerblue',
+          tabBarActiveTintColor: 'darkcyan',
           tabBarInactiveTintColor: 'gray',
         })}>
         <Tab.Screen
-          name="Home"
+          name="HomeTab"
           component={HomeScreen}
-          options={optionTabScreen}
+          options={{
+            headerShown: false,
+            tabBarLabel: 'Home',
+            tabBarLabelStyle: {
+              fontSize: 11,
+              fontWeight: '500',
+              marginBottom: 1,
+            },
+          }}
+        />
+        <Tab.Screen
+          name="EventTab"
+          component={EventScreen}
+          options={{
+            headerShown: false,
+            tabBarLabel: 'Event',
+            tabBarLabelStyle: {
+              fontSize: 11,
+              fontWeight: '500',
+              marginBottom: 1,
+            },
+          }}
+        />
+        <Tab.Screen
+          name="NgajiTab"
+          component={NgajiScreen}
+          options={{
+            headerShown: false,
+            tabBarLabel: 'Ngaji',
+            tabBarLabelStyle: {
+              fontSize: 11,
+              fontWeight: '500',
+              marginBottom: 1,
+            },
+          }}
+        />
+        <Tab.Screen
+          name="EkonomiTab"
+          component={EkonomiScreen}
+          options={{
+            headerShown: false,
+            tabBarLabel: 'Ekonomi',
+            tabBarLabelStyle: {
+              fontSize: 11,
+              fontWeight: '500',
+              marginBottom: 1,
+            },
+          }}
+        />
+        <Tab.Screen
+          name="DaftarSantriTab"
+          component={DaftarSantriScreen}
+          options={{
+            headerShown: false,
+            tabBarLabel: 'Santri Baru',
+            tabBarLabelStyle: {
+              fontSize: 11,
+              fontWeight: '500',
+              marginBottom: 1,
+            },
+          }}
         />
       </Tab.Navigator>
     </NavigationContainer>

@@ -5,8 +5,10 @@ import {Badge} from 'react-native-paper';
 
 export default function Card({props}) {
   return (
-    <Pressable style={style.viewCard} onPress={() => console.log('pressed')}>
-      <Badge style={style.badgeCard}>{props.count}</Badge>
+    <Pressable
+      style={style.viewCard}
+      onPress={() => props.navigation.navigate(props.link)}>
+      {/* <Badge style={style.badgeCard}>{props.count}</Badge> */}
       <Image style={style.viewLogoCard} source={props.icon} />
       <Text style={style.textNameCard} numberOfLines={1}>
         {props.textName}

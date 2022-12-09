@@ -11,7 +11,7 @@ const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
-export default function Home({props}) {
+export default function Home({navigation}) {
   // --Refresh Page--
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(() => {
@@ -62,6 +62,8 @@ export default function Home({props}) {
               textName: 'Pesantren',
               textDetail: 'Detail Pesantren',
               count: 0,
+              link: 'HomeTab',
+              navigation,
             }}
           />
           <Card
@@ -70,6 +72,8 @@ export default function Home({props}) {
               textName: 'Event',
               textDetail: 'Daftar Event Festival Pesantren',
               count: 0,
+              link: 'EventTab',
+              navigation,
             }}
           />
           <Card
@@ -78,6 +82,8 @@ export default function Home({props}) {
               textName: 'Ngaji Online',
               textDetail: 'Jadwal Pengajian dan Live Streaming',
               count: 0,
+              link: 'NgajiTab',
+              navigation,
             }}
           />
           <Card
@@ -86,6 +92,8 @@ export default function Home({props}) {
               textName: 'Ekonomi Mikro',
               textDetail: 'Daftar Ekonomi Mikro Pesantren',
               count: 0,
+              link: 'EkonomiTab',
+              navigation,
             }}
           />
           <Card
@@ -94,6 +102,8 @@ export default function Home({props}) {
               textName: 'Wisata',
               textDetail: 'Daftar Wisata',
               count: 0,
+              link: 'HomeTab',
+              navigation,
             }}
           />
           <Card
@@ -102,6 +112,8 @@ export default function Home({props}) {
               textName: 'Oleh-Oleh',
               textDetail: 'Daftar Oleh-Oleh',
               count: 0,
+              link: 'HomeTab',
+              navigation,
             }}
           />
           <Card
@@ -110,6 +122,8 @@ export default function Home({props}) {
               textName: 'Data Masjid',
               textDetail: 'Daftar Masjid',
               count: 0,
+              link: 'HomeTab',
+              navigation,
             }}
           />
         </View>
