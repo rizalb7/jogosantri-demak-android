@@ -10,8 +10,8 @@ export const EventScreen = ({props}) => {
         name="EventScreen"
         component={Event}
         options={{
-          headerShown: false,
-          headerTitle: 'Jogo Santri Kabupaten Demak',
+          headerShown: true,
+          headerTitle: 'Event Festival Pesantren Kab Demak',
           headerTitleAlign: 'center',
         }}
       />
