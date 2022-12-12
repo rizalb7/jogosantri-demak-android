@@ -24,14 +24,16 @@ export default function Home({navigation}) {
   const ref = useRef(null);
   useScrollToTop(ref);
 
+  const headerApi = {
+    headers: {
+      'X-Api-Key': REACT_APP_JOGO_API_KEY,
+      Accept: '*/*',
+    },
+  };
+
   const [dSlider, setDSlider] = useState([]);
   const getDataSlider = async () => {
-    await fetch(REACT_APP_JOGO_API_URL + '/api/sliders/all', {
-      headers: {
-        'X-Api-Key': REACT_APP_JOGO_API_KEY,
-        Accept: '*/*',
-      },
-    })
+    await fetch(REACT_APP_JOGO_API_URL + '/api/sliders/all', headerApi)
       .then(response => response.json())
       .then(json => {
         setDSlider(json.data.sliders);
@@ -39,8 +41,109 @@ export default function Home({navigation}) {
       .catch(err => console.log(err));
   };
 
+  const [cPesantren, setCPesantren] = useState(0);
+  const getCountPesantren = async () => {
+    await fetch(
+      REACT_APP_JOGO_API_URL + '/api/lokasi_pesantren/all?limit=1',
+      headerApi,
+    )
+      .then(response => response.json())
+      .then(json => {
+        setCPesantren(json.total);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const [cEvent, setCEvent] = useState(0);
+  const getCountEvent = async () => {
+    await fetch(
+      REACT_APP_JOGO_API_URL + '/api/festival_event_pesantren/all?limit=1',
+      headerApi,
+    )
+      .then(response => response.json())
+      .then(json => {
+        setCEvent(json.total);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const [cNgaji, setCNgaji] = useState(0);
+  const getCountNgaji = async () => {
+    await fetch(
+      REACT_APP_JOGO_API_URL + '/api/pengajian_online/all?limit=1',
+      headerApi,
+    )
+      .then(response => response.json())
+      .then(json => {
+        setCNgaji(json.total);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const [cEkonomi, setCEkonomi] = useState(0);
+  const getCountEkonomi = async () => {
+    await fetch(
+      REACT_APP_JOGO_API_URL + '/api/ekonomi_mikro_pesantren/all?limit=1',
+      headerApi,
+    )
+      .then(response => response.json())
+      .then(json => {
+        setCEkonomi(json.total);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const [cWisata, setCWisata] = useState(0);
+  const getCountWisata = async () => {
+    await fetch(
+      REACT_APP_JOGO_API_URL +
+        '/api/data_kota_lama/all?limit=1&filter=2&field=kode',
+      headerApi,
+    )
+      .then(response => response.json())
+      .then(json => {
+        setCWisata(json.total);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const [cOleh, setCOleh] = useState(0);
+  const getCountOleh = async () => {
+    await fetch(
+      REACT_APP_JOGO_API_URL +
+        '/api/data_kota_lama/all?limit=1&filter=3&field=kode',
+      headerApi,
+    )
+      .then(response => response.json())
+      .then(json => {
+        setCOleh(json.total);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const [cMasjid, setCMasjid] = useState(0);
+  const getCountMasjid = async () => {
+    await fetch(
+      REACT_APP_JOGO_API_URL +
+        '/api/data_kota_lama/all?limit=1&filter=1&field=kode',
+      headerApi,
+    )
+      .then(response => response.json())
+      .then(json => {
+        setCMasjid(json.total);
+      })
+      .catch(err => console.log(err));
+  };
+
   useEffect(() => {
     getDataSlider();
+    getCountPesantren();
+    getCountEvent();
+    getCountNgaji();
+    getCountEkonomi();
+    getCountWisata();
+    getCountOleh();
+    getCountMasjid();
     SplashScreen.hide();
   }, []);
 
@@ -61,7 +164,7 @@ export default function Home({navigation}) {
               icon: require('../../android/app/src/main/assets/icon/icon-pesantren.png'),
               textName: 'Pesantren',
               textDetail: 'Detail Pesantren',
-              count: 0,
+              count: cPesantren,
               link: 'HomeTab',
               navigation,
             }}
@@ -71,7 +174,7 @@ export default function Home({navigation}) {
               icon: require('../../android/app/src/main/assets/icon/icon-event.png'),
               textName: 'Event',
               textDetail: 'Daftar Event Festival Pesantren',
-              count: 0,
+              count: cEvent,
               link: 'EventTab',
               navigation,
             }}
@@ -81,7 +184,7 @@ export default function Home({navigation}) {
               icon: require('../../android/app/src/main/assets/icon/icon-ngaji.png'),
               textName: 'Ngaji Online',
               textDetail: 'Jadwal Pengajian dan Live Streaming',
-              count: 0,
+              count: cNgaji,
               link: 'NgajiTab',
               navigation,
             }}
@@ -91,7 +194,7 @@ export default function Home({navigation}) {
               icon: require('../../android/app/src/main/assets/icon/icon-ekonomi.png'),
               textName: 'Ekonomi Mikro',
               textDetail: 'Daftar Ekonomi Mikro Pesantren',
-              count: 0,
+              count: cEkonomi,
               link: 'EkonomiTab',
               navigation,
             }}
@@ -101,7 +204,7 @@ export default function Home({navigation}) {
               icon: require('../../android/app/src/main/assets/icon/icon-wisata.png'),
               textName: 'Wisata',
               textDetail: 'Daftar Wisata',
-              count: 0,
+              count: cWisata,
               link: 'HomeTab',
               navigation,
             }}
@@ -111,7 +214,7 @@ export default function Home({navigation}) {
               icon: require('../../android/app/src/main/assets/icon/icon-oleh.png'),
               textName: 'Oleh-Oleh',
               textDetail: 'Daftar Oleh-Oleh',
-              count: 0,
+              count: cOleh,
               link: 'HomeTab',
               navigation,
             }}
@@ -121,7 +224,7 @@ export default function Home({navigation}) {
               icon: require('../../android/app/src/main/assets/icon/icon-masjid.png'),
               textName: 'Data Masjid',
               textDetail: 'Daftar Masjid',
-              count: 0,
+              count: cMasjid,
               link: 'HomeTab',
               navigation,
             }}

@@ -8,7 +8,7 @@ export default function Card({props}) {
     <Pressable
       style={style.viewCard}
       onPress={() => props.navigation.navigate(props.link)}>
-      {/* <Badge style={style.badgeCard}>{props.count}</Badge> */}
+      <Badge style={style.badgeCard}>{props.count}</Badge>
       <Image style={style.viewLogoCard} source={props.icon} />
       <Text style={style.textNameCard} numberOfLines={1}>
         {props.textName}
