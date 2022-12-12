@@ -205,7 +205,7 @@ export default function Home({navigation}) {
               textName: 'Wisata',
               textDetail: 'Daftar Wisata',
               count: cWisata,
-              link: 'HomeTab',
+              link: 'WisataScreen',
               navigation,
             }}
           />
@@ -215,7 +215,7 @@ export default function Home({navigation}) {
               textName: 'Oleh-Oleh',
               textDetail: 'Daftar Oleh-Oleh',
               count: cOleh,
-              link: 'HomeTab',
+              link: 'OlehScreen',
               navigation,
             }}
           />
@@ -225,7 +225,7 @@ export default function Home({navigation}) {
               textName: 'Data Masjid',
               textDetail: 'Daftar Masjid',
               count: cMasjid,
-              link: 'HomeTab',
+              link: 'MasjidScreen',
               navigation,
             }}
           />
