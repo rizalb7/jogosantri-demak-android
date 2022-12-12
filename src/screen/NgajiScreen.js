@@ -10,8 +10,8 @@ export const NgajiScreen = ({props}) => {
         name="NgajiScreen"
         component={Ngaji}
         options={{
-          headerShown: false,
-          headerTitle: 'Jogo Santri Kabupaten Demak',
+          headerShown: true,
+          headerTitle: 'Pengajian Online Kab Demak',
           headerTitleAlign: 'center',
         }}
       />

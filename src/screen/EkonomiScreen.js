@@ -10,8 +10,8 @@ export const EkonomiScreen = ({props}) => {
         name="EkonomiScreen"
         component={Ekonomi}
         options={{
-          headerShown: false,
-          headerTitle: 'Jogo Santri Kabupaten Demak',
+          headerShown: true,
+          headerTitle: 'Ekonomi Mikro Pesantren Kab Demak',
           headerTitleAlign: 'center',
         }}
       />

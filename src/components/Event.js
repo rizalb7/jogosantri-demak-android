@@ -31,12 +31,15 @@ export default function Event({navigation}) {
 
   const [dEvent, setDEvent] = useState([]);
   const getDataEvent = async () => {
-    await fetch(REACT_APP_JOGO_API_URL + '/api/festival_event_pesantren/all', {
-      headers: {
-        'X-Api-Key': REACT_APP_JOGO_API_KEY,
-        Accept: '*/*',
+    await fetch(
+      REACT_APP_JOGO_API_URL + '/api/festival_event_pesantren/all?limit=1000',
+      {
+        headers: {
+          'X-Api-Key': REACT_APP_JOGO_API_KEY,
+          Accept: '*/*',
+        },
       },
-    })
+    )
       .then(response => response.json())
       .then(json => {
         setDEvent(json.data.festival_event_pesantren);
@@ -51,7 +54,7 @@ export default function Event({navigation}) {
   return (
     <SafeAreaView style={style.viewWrapper}>
       <ScrollView
-        showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={true}
         showsHorizontalScrollIndicator={false}
         ref={ref}
         refreshControl={
