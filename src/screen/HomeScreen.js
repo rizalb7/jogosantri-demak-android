@@ -1,7 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
-import {Alert, Pressable, Text, View} from 'react-native';
-import {Home, Masjid, Oleh, Pesantren, Wisata} from '../components';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {Home, Masjid, Oleh, Wisata} from '../components';
 
 const Stack = createStackNavigator();
 
@@ -14,15 +12,6 @@ export const HomeScreen = ({props}) => {
         options={{
           headerShown: false,
           headerTitle: 'Jogo Santri Kabupaten Demak',
-          headerTitleAlign: 'center',
-        }}
-      />
-      <Stack.Screen
-        name="PesantrenScreen"
-        component={Pesantren}
-        options={{
-          headerShown: true,
-          headerTitle: 'Daftar Pesantren Kab Demak',
           headerTitleAlign: 'center',
         }}
       />

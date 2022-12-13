@@ -6,6 +6,7 @@ import {
   NgajiScreen,
   DaftarSantriScreen,
   EkonomiScreen,
+  PesantrenScreen,
 } from '../screen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Image} from 'react-native';
@@ -28,6 +29,13 @@ export default function TabNavigation() {
                   size={30}
                   color={color}
                   style={{marginTop: 2}}
+                />
+              );
+            } else if (route.name === 'PesantrenTab') {
+              return (
+                <Image
+                  style={{width: 32, height: 32, marginTop: 3}}
+                  source={require('../../android/app/src/main/assets/icon/icon-pesantren.png')}
                 />
               );
             } else if (route.name === 'EventTab') {
@@ -72,6 +80,19 @@ export default function TabNavigation() {
           options={{
             headerShown: false,
             tabBarLabel: 'Home',
+            tabBarLabelStyle: {
+              fontSize: 11,
+              fontWeight: '500',
+              marginBottom: 1,
+            },
+          }}
+        />
+        <Tab.Screen
+          name="PesantrenTab"
+          component={PesantrenScreen}
+          options={{
+            headerShown: false,
+            tabBarLabel: 'Pesantren',
             tabBarLabelStyle: {
               fontSize: 11,
               fontWeight: '500',

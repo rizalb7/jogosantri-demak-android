@@ -1,13 +1,5 @@
 import React, {useState, useEffect, useCallback, useRef} from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ActivityIndicator,
-  RefreshControl,
-} from 'react-native';
+import {SafeAreaView, View, FlatList, RefreshControl} from 'react-native';
 import {style} from '../style';
 import {REACT_APP_JOGO_API_URL, REACT_APP_JOGO_API_KEY} from '@env';
 import PesantrenCard from './items/pesantren/PesantrenCard';
@@ -19,6 +11,7 @@ const wait = timeout => {
 };
 
 export default function Pesantren({navigation}) {
+  // --Refresh Page--
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -36,14 +29,11 @@ export default function Pesantren({navigation}) {
   const [offset, setOffset] = useState(0);
   const [isListEnd, setIsListEnd] = useState(false);
 
-  useEffect(() => getData(), []);
-
-  const getData = () => {
+  const getData = async () => {
     // console.log(offset);
     if (!loading && !isListEnd) {
       setLoading(true);
-      //Service to get the data from the server to render
-      fetch(
+      await fetch(
         REACT_APP_JOGO_API_URL +
           '/api/lokasi_pesantren/all?limit=1&start=' +
           offset,
@@ -54,14 +44,10 @@ export default function Pesantren({navigation}) {
           },
         },
       )
-        //Sending the currect offset with get request
         .then(response => response.json())
         .then(responseJson => {
-          //Successful response from the API Call
-          // console.log(responseJson.data.lokasi_pesantren.length);
           if (responseJson.data.lokasi_pesantren.length > 0) {
             setOffset(offset + 1);
-            //After the response increasing the offset for the next API call.
             setDataSource([
               ...dataSource,
               ...responseJson.data.lokasi_pesantren,
@@ -78,14 +64,12 @@ export default function Pesantren({navigation}) {
     }
   };
 
+  useEffect(() => {
+    getData();
+  }, []);
+
   const ItemView = ({item}) => {
     return (
-      // Flat List Item
-      // <Text style={styles.itemStyle}>
-      //   {item.id_lokasi_pesantren}
-      //   {'.'}
-      //   {item.nama_lokasi.toUpperCase()}
-      // </Text>
       <View>
         <PesantrenCard
           props={{
@@ -93,9 +77,20 @@ export default function Pesantren({navigation}) {
             image: item.file_gambar,
             title: item.nama_lokasi,
             address: item.alamat,
+            desa: item.desa,
+            kecamatan: item.kecamatan,
             description: item.deskripsi,
             lat: item.latitude_pesantren,
             long: item.longitude_pesantren,
+            sml: item.santri_mukim_l,
+            smp: item.santri_mukim_p,
+            smt: item.santri_mukim_total,
+            stml: item.santri_tidak_mukim_l,
+            stmp: item.santri_tidak_mukim_p,
+            stmt: item.santri_tidak_mukim_total,
+            jl: item.jumlah_l,
+            jp: item.jumlah_p,
+            jt: item.jumlah_total,
           }}
         />
       </View>

@@ -1,15 +1,10 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  ScrollView,
-  RefreshControl,
-} from 'react-native';
+import {View, SafeAreaView, RefreshControl, FlatList} from 'react-native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import EventCard from './items/event/EventCard';
 import {REACT_APP_JOGO_API_URL, REACT_APP_JOGO_API_KEY} from '@env';
 import {useScrollToTop} from '@react-navigation/native';
 import {style} from '../style';
+import RenderFooter from './items/layouts/RenderFooter';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -21,7 +16,7 @@ export default function Event({navigation}) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => {
-      getDataEvent();
+      getData();
       setRefreshing(false);
     });
   }, []);
@@ -29,61 +24,83 @@ export default function Event({navigation}) {
   const ref = useRef(null);
   useScrollToTop(ref);
 
-  const [dEvent, setDEvent] = useState([]);
-  const getDataEvent = async () => {
-    await fetch(
-      REACT_APP_JOGO_API_URL + '/api/festival_event_pesantren/all?limit=1000',
-      {
-        headers: {
-          'X-Api-Key': REACT_APP_JOGO_API_KEY,
-          Accept: '*/*',
+  const [loading, setLoading] = useState(false);
+  const [dataSource, setDataSource] = useState([]);
+  const [offset, setOffset] = useState(0);
+  const [isListEnd, setIsListEnd] = useState(false);
+
+  const getData = async () => {
+    // console.log(offset);
+    if (!loading && !isListEnd) {
+      setLoading(true);
+      await fetch(
+        REACT_APP_JOGO_API_URL +
+          '/api/festival_event_pesantren/all?limit=1&start=' +
+          offset,
+        {
+          headers: {
+            'X-Api-Key': REACT_APP_JOGO_API_KEY,
+            Accept: '*/*',
+          },
         },
-      },
-    )
-      .then(response => response.json())
-      .then(json => {
-        setDEvent(json.data.festival_event_pesantren);
-      })
-      .catch(err => console.log(err));
+      )
+        .then(response => response.json())
+        .then(responseJson => {
+          if (responseJson.data.festival_event_pesantren.length > 0) {
+            setOffset(offset + 1);
+            setDataSource([
+              ...dataSource,
+              ...responseJson.data.festival_event_pesantren,
+            ]);
+            setLoading(false);
+          } else {
+            setIsListEnd(true);
+            setLoading(false);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
   };
 
   useEffect(() => {
-    getDataEvent();
+    getData();
   }, []);
+
+  const ItemView = ({item}) => {
+    return (
+      <View>
+        <EventCard
+          props={{
+            id: item.id_event,
+            image: item.file,
+            title: item.judul_event,
+            date: item.tgl_event,
+            time: item.waktu_event,
+            location: item.tempat_event,
+            description: item.keterangan,
+            link: item.link_streaming,
+          }}
+        />
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={style.viewWrapper}>
-      <ScrollView
-        showsVerticalScrollIndicator={true}
-        showsHorizontalScrollIndicator={false}
+      <FlatList
+        data={dataSource}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={ItemView}
+        ListFooterComponent={<RenderFooter props={{loading}} />}
+        onEndReached={getData}
+        onEndReachedThreshold={0.5}
         ref={ref}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
-        <View>
-          {dEvent.length ? (
-            dEvent.map((val, index) => (
-              <EventCard
-                key={index}
-                props={{
-                  id: val.id_event,
-                  image: val.file,
-                  title: val.judul_event,
-                  date: val.tgl_event,
-                  time: val.waktu_event,
-                  location: val.tempat_event,
-                  description: val.keterangan,
-                  link: val.link_streaming,
-                }}
-              />
-            ))
-          ) : (
-            <Text style={{textAlign: 'center', color: 'black'}}>
-              Memuat Data, cek koneksi...
-            </Text>
-          )}
-        </View>
-      </ScrollView>
+        }
+      />
     </SafeAreaView>
   );
 }
