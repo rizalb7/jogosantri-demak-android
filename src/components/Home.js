@@ -165,7 +165,7 @@ export default function Home({navigation}) {
               textName: 'Pesantren',
               textDetail: 'Detail Pesantren',
               count: cPesantren,
-              link: 'HomeTab',
+              link: 'PesantrenScreen',
               navigation,
             }}
           />

@@ -6,5 +6,16 @@ import Ekonomi from './Ekonomi';
 import Wisata from './Wisata';
 import Oleh from './Oleh';
 import Masjid from './Masjid';
+import Pesantren from './Pesantren';
 
-export {Home, Event, Ngaji, DaftarSantri, Ekonomi, Wisata, Oleh, Masjid};
+export {
+  Home,
+  Event,
+  Ngaji,
+  DaftarSantri,
+  Ekonomi,
+  Wisata,
+  Oleh,
+  Masjid,
+  Pesantren,
+};
