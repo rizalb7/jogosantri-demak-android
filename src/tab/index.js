@@ -144,6 +144,7 @@ export default function TabNavigation() {
           component={DaftarSantriScreen}
           options={{
             headerShown: false,
+            tabBarHideOnKeyboard: true,
             tabBarLabel: 'Santri Baru',
             tabBarLabelStyle: {
               fontSize: 11,
