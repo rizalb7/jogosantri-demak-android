@@ -12,6 +12,7 @@ import {useController, useForm} from 'react-hook-form';
 import {Button, Provider} from 'react-native-paper';
 import {DatePickerInput} from 'react-native-paper-dates';
 import {REACT_APP_JOGO_API_URL, REACT_APP_JOGO_API_KEY} from '@env';
+import qs from 'querystring';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -23,19 +24,21 @@ function DaftarSantri({navigation}) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => {
+      reset(emptyForm);
       setRefreshing(false);
     });
   }, []);
-  const {control, setFocus, handleSubmit} = useForm({
-    defaultValues: {
-      nama_santri: '',
-      tgl_lahir: new Date(),
-      alamat: '',
-      jenis_kelamin: '',
-      telepon: '',
-      jenis_sekolah: '',
-      pesantren: '',
-    },
+  let emptyForm = {
+    nama_santri: '',
+    tgl_lahir: new Date(),
+    alamat: '',
+    jenis_kelamin: '',
+    telepon: '',
+    jenis_sekolah: '',
+    pesantren: '',
+  };
+  const {control, reset, setFocus, handleSubmit} = useForm({
+    defaultValues: emptyForm,
     mode: 'onChange',
   });
 
@@ -77,68 +80,28 @@ function DaftarSantri({navigation}) {
       (data.tgl_lahir.getMonth() + 1) +
       '-' +
       data.tgl_lahir.getDate();
-    console.log(
-      JSON.stringify(
-        'tgl_daftar=' +
-          dateNow +
-          '&nama_santri=' +
-          data.nama_santri +
-          '&tgl_lahir=' +
-          tglLahir +
-          '&alamat=' +
-          data.alamat +
-          '&jenis_kelamin=' +
-          data.jenis_kelamin +
-          '&telepon=' +
-          data.telepon +
-          '&jenis_sekolah=' +
-          data.jenis_sekolah +
-          '&pesantren=' +
-          data.pesantren,
-      ),
-    );
     await fetch(REACT_APP_JOGO_API_URL + '/api/pendaftaran_santri_baru/add', {
       method: 'POST',
       headers: {
         'X-Api-Key': REACT_APP_JOGO_API_KEY,
-        // 'Content-Type': 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body:
-        // JSON.stringify({
-        //   tgl_daftar: dateNow,
-        //   nama_santri: data.nama_santri,
-        //   tgl_lahir: tglLahir,
-        //   alamat: data.alamat,
-        //   jenis_kelamin: data.jenis_kelamin,
-        //   telepon: data.telepon,
-        //   jenis_sekolah: data.jenis_sekolah,
-        //   pesantren: data.pesantren,
-        // }),
-        JSON.stringify(
-          'tgl_daftar=' +
-            dateNow +
-            '&nama_santri=' +
-            data.nama_santri +
-            '&tgl_lahir=' +
-            tglLahir +
-            '&alamat=' +
-            data.alamat +
-            '&jenis_kelamin=' +
-            data.jenis_kelamin +
-            '&telepon=' +
-            data.telepon +
-            '&jenis_sekolah=' +
-            data.jenis_sekolah +
-            '&pesantren=' +
-            data.pesantren,
-        ),
+      body: qs.stringify({
+        tgl_daftar: dateNow,
+        nama_santri: data.nama_santri,
+        tgl_lahir: tglLahir,
+        alamat: data.alamat,
+        jenis_kelamin: data.jenis_kelamin,
+        telepon: data.telepon,
+        jenis_sekolah: data.jenis_sekolah,
+        pesantren: data.pesantren,
+      }),
     })
-      .then(response => response.json())
       .then(json => {
-        console.log('Data terkirim');
+        alert('Data Terkirim');
+        reset(emptyForm);
       })
-      .catch(err => console.log(err));
+      .catch(err => alert('Gagal Terkirim'));
   };
 
   useEffect(() => {
@@ -153,10 +116,9 @@ function DaftarSantri({navigation}) {
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
           contentInsetAdjustmentBehavior="always"
-          // refreshControl={
-          //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          // }
-        >
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <Text style={styles.headingStyle}>Pendaftaran Santri Baru</Text>
           <FormBuilder
             control={control}
@@ -228,6 +190,7 @@ function DaftarSantri({navigation}) {
                 },
                 textInputProps: {
                   label: 'No Telepon',
+                  keyboardType: 'numeric',
                 },
               },
               {
