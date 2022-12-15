@@ -1,4 +1,8 @@
+#environtment variable
 .env
+#android & ios dir
+android/
+ios/
 # OSX
 #
 .DS_Store
