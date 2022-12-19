@@ -5,6 +5,9 @@ import {REACT_APP_JOGO_API_URL, REACT_APP_JOGO_API_KEY} from '@env';
 import PesantrenCard from './items/pesantren/PesantrenCard';
 import {useScrollToTop} from '@react-navigation/native';
 import RenderFooter from './items/layouts/RenderFooter';
+import {Button, Provider, Searchbar} from 'react-native-paper';
+import {FormBuilder} from 'react-native-paper-form-builder';
+import {useForm} from 'react-hook-form';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -16,7 +19,10 @@ export default function Pesantren({navigation}) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => {
-      getData();
+      setSearchQuery('');
+      setIsListEnd(false);
+      getData(1);
+      reset({cari: ''});
       setRefreshing(false);
     });
   }, []);
@@ -24,28 +30,89 @@ export default function Pesantren({navigation}) {
   const ref = useRef(null);
   useScrollToTop(ref);
 
+  const {control, reset, setFocus, handleSubmit} = useForm({
+    defaultValues: {cari: ''},
+    mode: 'onChange',
+  });
+
+  const [dPesantren, setDPesantren] = useState([]);
+  const getDataPesantren = async () => {
+    await fetch(
+      REACT_APP_JOGO_API_URL + '/api/lokasi_pesantren/all?limit=300',
+      {
+        headers: {
+          'X-Api-Key': REACT_APP_JOGO_API_KEY,
+          Accept: '*/*',
+        },
+      },
+    )
+      .then(response => response.json())
+      .then(json => {
+        const data = json.data.lokasi_pesantren;
+        let arr = [];
+        data.map((val, index) => {
+          let datas = {};
+          datas.value = val.id_lokasi_pesantren;
+          datas.label = val.nama_lokasi;
+          arr.push(datas);
+        });
+        setDPesantren(arr);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const handleSearch = async data => {
+    await fetch(
+      REACT_APP_JOGO_API_URL +
+        '/api/lokasi_pesantren/all?limit=1&field=id_lokasi_pesantren&filter=' +
+        data.cari,
+      {
+        headers: {
+          'X-Api-Key': REACT_APP_JOGO_API_KEY,
+          Accept: '*/*',
+        },
+      },
+    )
+      .then(response => response.json())
+      .then(json => {
+        const data = json.data.lokasi_pesantren;
+        setDataSource(data);
+        setIsListEnd(true);
+        setLoading(false);
+      })
+      .catch(err => console.log(err));
+  };
+
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState([]);
   const [offset, setOffset] = useState(0);
   const [isListEnd, setIsListEnd] = useState(false);
 
-  const getData = async () => {
+  const getData = async status => {
     // console.log(offset);
+    if (status === 1) {
+      setOffset(0);
+    }
+    const url =
+      REACT_APP_JOGO_API_URL +
+      '/api/lokasi_pesantren/all?limit=1&start=' +
+      offset +
+      '&filter=' +
+      searchQuery;
+    // console.log(text);
+    // console.log(url);
+    // console.log('loading=' + loading + '--end=' + isListEnd);
     if (!loading && !isListEnd) {
       setLoading(true);
-      await fetch(
-        REACT_APP_JOGO_API_URL +
-          '/api/lokasi_pesantren/all?limit=1&start=' +
-          offset,
-        {
-          headers: {
-            'X-Api-Key': REACT_APP_JOGO_API_KEY,
-            Accept: '*/*',
-          },
+      await fetch(url, {
+        headers: {
+          'X-Api-Key': REACT_APP_JOGO_API_KEY,
+          Accept: '*/*',
         },
-      )
+      })
         .then(response => response.json())
         .then(responseJson => {
+          console.log(url);
           if (responseJson.data.lokasi_pesantren.length > 0) {
             setOffset(offset + 1);
             setDataSource([
@@ -64,8 +131,22 @@ export default function Pesantren({navigation}) {
     }
   };
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const onChangeSearch = query => {
+    const {text} = query.nativeEvent;
+    setSearchQuery(text);
+  };
+
+  const onSearch = () => {
+    setDataSource([]);
+    setIsListEnd(false);
+    setOffset(0);
+    getData(1);
+  };
+
   useEffect(() => {
     getData();
+    getDataPesantren();
   }, []);
 
   const ItemView = ({item}) => {
@@ -97,8 +178,68 @@ export default function Pesantren({navigation}) {
     );
   };
 
+  const [text, setText] = useState('');
+
   return (
     <SafeAreaView style={style.viewWrapper}>
+      <View style={{flexDirection: 'row', marginVertical: 8}}>
+        <Searchbar
+          placeholder="Ketik Keyword"
+          onChange={onChangeSearch}
+          value={searchQuery}
+          style={{width: '80%', marginLeft: 4}}
+          clearButtonMode="never"
+          // clearIcon={'circle-outline'}
+          // onSubmitEditing={onSearch}
+        />
+        <Button
+          mode="contained-tonal"
+          buttonColor="black"
+          textColor="white"
+          labelStyle={{padding: 5, fontSize: 16, marginHorizontal: 5}}
+          style={{height: 52, marginLeft: 6, borderRadius: 4}}
+          onPress={onSearch}>
+          CARI
+        </Button>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          height: 50,
+          padding: 4,
+          marginBottom: 20,
+        }}>
+        <Provider>
+          <FormBuilder
+            control={control}
+            setFocus={setFocus}
+            formConfigArray={[
+              {
+                name: 'cari',
+                type: 'autocomplete',
+                rules: {
+                  required: {
+                    value: true,
+                    message: 'Pencarian harus dipilih',
+                  },
+                },
+                textInputProps: {
+                  label: 'Pencarian',
+                },
+                options: dPesantren,
+              },
+            ]}
+          />
+        </Provider>
+        <Button
+          mode="contained-tonal"
+          buttonColor="snow"
+          labelStyle={{padding: 5, fontSize: 16, marginHorizontal: 5}}
+          style={{height: 50, marginLeft: 4, marginTop: 6, borderRadius: 6}}
+          onPress={handleSubmit(data => handleSearch(data))}>
+          Tampilkan
+        </Button>
+      </View>
       <FlatList
         data={dataSource}
         keyExtractor={(item, index) => index.toString()}

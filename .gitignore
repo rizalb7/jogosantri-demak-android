@@ -33,7 +33,10 @@ build/
 .idea
 .gradle
 local.properties
+gradle.properties
+android/gradle.properties
 *.iml
+/android/*
 *.hprof
 .cxx/
 
@@ -47,6 +50,7 @@ yarn-error.log
 buck-out/
 \.buckd/
 *.keystore
+android/app/*.keystore
 !debug.keystore
 
 # fastlane

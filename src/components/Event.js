@@ -5,6 +5,7 @@ import {REACT_APP_JOGO_API_URL, REACT_APP_JOGO_API_KEY} from '@env';
 import {useScrollToTop} from '@react-navigation/native';
 import {style} from '../style';
 import RenderFooter from './items/layouts/RenderFooter';
+import {Button, Searchbar} from 'react-native-paper';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -16,7 +17,9 @@ export default function Event({navigation}) {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => {
-      getData();
+      setSearchQuery('');
+      setIsListEnd(false);
+      getData(1);
       setRefreshing(false);
     });
   }, []);
@@ -29,23 +32,27 @@ export default function Event({navigation}) {
   const [offset, setOffset] = useState(0);
   const [isListEnd, setIsListEnd] = useState(false);
 
-  const getData = async () => {
-    // console.log(offset);
+  const getData = async status => {
+    if (status === 1) {
+      setOffset(0);
+    }
     if (!loading && !isListEnd) {
-      setLoading(true);
-      await fetch(
+      const url =
         REACT_APP_JOGO_API_URL +
-          '/api/festival_event_pesantren/all?limit=1&start=' +
-          offset,
-        {
-          headers: {
-            'X-Api-Key': REACT_APP_JOGO_API_KEY,
-            Accept: '*/*',
-          },
+        '/api/festival_event_pesantren/all?limit=1&start=' +
+        offset +
+        '&filter=' +
+        searchQuery;
+      setLoading(true);
+      await fetch(url, {
+        headers: {
+          'X-Api-Key': REACT_APP_JOGO_API_KEY,
+          Accept: '*/*',
         },
-      )
+      })
         .then(response => response.json())
         .then(responseJson => {
+          console.log(url);
           if (responseJson.data.festival_event_pesantren.length > 0) {
             setOffset(offset + 1);
             setDataSource([
@@ -62,6 +69,18 @@ export default function Event({navigation}) {
           console.error(error);
         });
     }
+  };
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const onChangeSearch = query => {
+    const {text} = query.nativeEvent;
+    setSearchQuery(text);
+  };
+
+  const onSearch = () => {
+    setDataSource([]);
+    setIsListEnd(false);
+    getData(1);
   };
 
   useEffect(() => {
@@ -89,6 +108,26 @@ export default function Event({navigation}) {
 
   return (
     <SafeAreaView style={style.viewWrapper}>
+      <View style={{flexDirection: 'row', marginVertical: 8}}>
+        <Searchbar
+          placeholder="Ketik Keyword"
+          onChange={onChangeSearch}
+          value={searchQuery}
+          style={{width: '80%', marginLeft: 4}}
+          clearButtonMode="never"
+          // clearIcon={'circle-outline'}
+          // onSubmitEditing={onSearch}
+        />
+        <Button
+          mode="contained-tonal"
+          buttonColor="black"
+          textColor="white"
+          labelStyle={{padding: 5, fontSize: 16, marginHorizontal: 5}}
+          style={{height: 52, marginLeft: 6, borderRadius: 4}}
+          onPress={onSearch}>
+          CARI
+        </Button>
+      </View>
       <FlatList
         data={dataSource}
         keyExtractor={(item, index) => index.toString()}
