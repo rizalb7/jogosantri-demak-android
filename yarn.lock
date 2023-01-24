@@ -1590,9 +1590,9 @@
     "use-latest-callback" "^0.1.5"
 
 "@react-navigation/elements@^1.3.9":
-  "integrity" "sha512-V9aIZN19ufaKWlXT4UcM545tDiEt9DIQS+74pDgbnzoQcDypn0CvSqWopFhPACMdJatgmlZUuOrrMfTeNrBWgA=="
-  "resolved" "https://registry.npmjs.org/@react-navigation/elements/-/elements-1.3.9.tgz"
-  "version" "1.3.9"
+  "integrity" "sha512-iVcLIYg/XJk1p6X1rSFhNhCjAJ3ORqNT2/bJqw7I/liujeJAoz1oZ5JDoEcZaA0wMDts1txxLuqAYJmhCgU2aA=="
+  "resolved" "https://registry.npmjs.org/@react-navigation/elements/-/elements-1.3.12.tgz"
+  "version" "1.3.12"
 
 "@react-navigation/native@^6.0.0", "@react-navigation/native@^6.0.16":
   "integrity" "sha512-YVmzypkDppV/vAG+66KTJ2RFtPjhDTLLjgk8TNTCHG3pahq1q13zbnEPjqB42bU4kgL5SG17O4saErt1DJaWQg=="
@@ -5929,7 +5929,7 @@
     "kleur" "^3.0.3"
     "sisteransi" "^1.0.5"
 
-"prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
+"prop-types@^15.5.7", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
   "integrity" "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="
   "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   "version" "15.8.1"
@@ -6131,6 +6131,13 @@
   dependencies:
     "prop-types" "^15.7.2"
     "yargs" "^16.1.1"
+
+"react-native-view-more-text@^2.2.0":
+  "integrity" "sha512-8l/HhIieWA13Fg1Vt5eNNcicykqZ1IbmD/ozrejg5HtB9D/yluW/dCjapGwU/Wt+fLlT43MPBAxrEGPO/g+Aug=="
+  "resolved" "https://registry.npmjs.org/react-native-view-more-text/-/react-native-view-more-text-2.2.0.tgz"
+  "version" "2.2.0"
+  dependencies:
+    "prop-types" "^15.5.7"
 
 "react-native@*", "react-native@>=0.57.0", "react-native@>=0.65.0", "react-native@0.70.6":
   "integrity" "sha512-xtQdImPHnwgraEx3HIZFOF+D1hJ9bC5mfpIdUGoMHRws6OmvHAjmFpO6qfdnaQ29vwbmZRq7yf14sbury74R/w=="
